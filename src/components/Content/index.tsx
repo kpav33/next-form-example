@@ -1,50 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  // Netlify Forms
+  //   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //     event.preventDefault();
+  //     setFormStatus("loading");
+
+  //     const form = event.target as HTMLFormElement;
+  //     const formData = new FormData(form);
+
+  //     // Convert FormData to URLSearchParams properly
+  //     const urlSearchParams = new URLSearchParams();
+  //     for (const [key, value] of formData.entries()) {
+  //       urlSearchParams.append(key, value.toString());
+  //     }
+
+  //     try {
+  //       //   const response = await fetch("/", {
+  //       //     method: "POST",
+  //       //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //       //     // body: new URLSearchParams(formData).toString()
+  //       //     body: urlSearchParams.toString(),
+  //       //   });
+
+  //       // Fix build error
+  //       const response = await fetch("/__forms.html", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //         // body: new URLSearchParams(formData).toString()
+  //         body: urlSearchParams.toString(),
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+
+  //       setFormStatus("success");
+  //       form.reset();
+  //     } catch (error) {
+  //       console.error("Error submitting form:", error);
+  //       setFormStatus("error");
+  //     }
+  //   };
+
+  // Nodemailer with Gmail
+  // Gmail standard account allows sending up to 500 email per day
+  // Rate limiting, CAPTCHA for spam prevention
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     setFormStatus("loading");
+    setErrorMessage("");
 
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
-
-    // Convert FormData to URLSearchParams properly
-    const urlSearchParams = new URLSearchParams();
-    for (const [key, value] of formData.entries()) {
-      urlSearchParams.append(key, value.toString());
+    if (!executeRecaptcha) {
+      setFormStatus("error");
+      setErrorMessage("reCAPTCHA not loaded");
+      return;
     }
 
     try {
-      //   const response = await fetch("/", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      //     // body: new URLSearchParams(formData).toString()
-      //     body: urlSearchParams.toString(),
-      //   });
+      // Get reCAPTCHA token
+      const recaptchaToken = await executeRecaptcha();
+      //   console.log("Clietn side token ", recaptchaToken);
 
-      // Fix build error
-      const response = await fetch("/__forms.html", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        // body: new URLSearchParams(formData).toString()
-        body: urlSearchParams.toString(),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: event.target.name.value,
+          email: event.target.email.value,
+          message: event.target.message.value,
+          recaptchaToken,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Failed to send message");
 
       setFormStatus("success");
-      form.reset();
+      event.target.reset();
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error:", error);
       setFormStatus("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to send message"
+      );
     }
   };
 
@@ -121,7 +171,8 @@ export default function Home() {
 
           {formStatus === "error" && (
             <p className="text-red-600">
-              There was an error sending your message. Please try again.
+              There was an error sending your message. Please try again.{" "}
+              {errorMessage}.
             </p>
           )}
         </form>
