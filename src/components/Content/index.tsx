@@ -21,7 +21,15 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch("/", {
+      //   const response = await fetch("/", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      //     // body: new URLSearchParams(formData).toString()
+      //     body: urlSearchParams.toString(),
+      //   });
+
+      // Fix build error
+      const response = await fetch("/__forms.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         // body: new URLSearchParams(formData).toString()
