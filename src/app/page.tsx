@@ -1,9 +1,9 @@
+import Content from "@/components/Content";
+
 export default function Home() {
   return (
     <div>
-      <header>Header</header>
-      <main>Hello world</main>
-      <footer>Footer</footer>
+      <Content />
     </div>
   );
 }
