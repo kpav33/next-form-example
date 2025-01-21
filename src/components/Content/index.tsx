@@ -52,7 +52,7 @@ export default function Home() {
 
   // Nodemailer with Gmail
   // Gmail standard account allows sending up to 500 email per day
-  // Rate limiting, CAPTCHA for spam prevention
+  // CAPTCHA for spam prevention
   const [errorMessage, setErrorMessage] = useState<string>("");
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -97,6 +97,9 @@ export default function Home() {
       );
     }
   };
+
+  // We could also use a third party service like Formspree, but while there is a free tier, we might end up having to pay for it, if we go above it (In case of Formspree the free tier is 50 submissions per month, lowest tier is Personal with 200 submissions and 10$ per month)
+  // Nodemailer with Google reCAPTCHA for protection should be a good free solution
 
   return (
     <div className="min-h-screen flex flex-col">
