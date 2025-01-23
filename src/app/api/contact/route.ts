@@ -34,6 +34,10 @@ import { verifyRecaptcha } from "@/lib/verifyRecaptcha";
 
 export async function POST(request: Request) {
   try {
+    console.log("SMTP Host:", process.env.SMTP_HOST);
+    console.log("SMTP Port:", process.env.SMTP_PORT);
+    console.log("SMTP User:", process.env.SMTP_USER);
+
     const body = await request.json();
     const { name, email, message, recaptchaToken } = body;
     // console.log("Body content", body);
@@ -48,19 +52,19 @@ export async function POST(request: Request) {
     }
     // console.log("isHuman check ", isHuman);
 
-    const transporterCheck = await new Promise((resolve, reject) => {
-      // verify connection configuration
-      transporter.verify(function (error, success) {
-        if (error) {
-          console.log(error);
-          reject(error);
-        } else {
-          console.log("Server is ready to take our messages");
-          resolve(success);
-        }
-      });
-    });
-    console.log("transporterCheck ", transporterCheck);
+    // const transporterCheck = await new Promise((resolve, reject) => {
+    //   // verify connection configuration
+    //   transporter.verify(function (error, success) {
+    //     if (error) {
+    //       console.log(error);
+    //       reject(error);
+    //     } else {
+    //       console.log("Server is ready to take our messages");
+    //       resolve(success);
+    //     }
+    //   });
+    // });
+    // console.log("transporterCheck ", transporterCheck);
 
     // Email content
     const mailOptions = {
@@ -90,7 +94,24 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error sending email:", error);
-    return NextResponse.json({ error: "Error sending email" }, { status: 500 });
+    // console.error("Error sending email:", error);
+    // return NextResponse.json({ error: "Error sending email" }, { status: 500 });
+
+    if (error instanceof Error) {
+      console.error("Error sending email:", error.message);
+      return NextResponse.json(
+        {
+          error: "Error sending email",
+          details: error.message,
+        },
+        { status: 500 }
+      );
+    } else {
+      console.error("Unknown error:", error);
+      return NextResponse.json(
+        { error: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 }
