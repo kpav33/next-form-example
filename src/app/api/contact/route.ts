@@ -35,6 +35,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { name, email, message, recaptchaToken } = body;
+    console.log("Body content", body);
 
     // Verify reCAPTCHA
     const isHuman = await verifyRecaptcha(recaptchaToken);
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    console.log("isHuman check ", isHuman);
 
     // Email content
     const mailOptions = {
@@ -62,9 +64,11 @@ export async function POST(request: Request) {
         <p><strong>Message:</strong> ${message}</p>
       `,
     };
+    console.log("mailOptions ", mailOptions);
 
     // Send email
     await transporter.sendMail(mailOptions);
+    console.log("Message sent!");
 
     return NextResponse.json(
       { message: "Email sent successfully" },
