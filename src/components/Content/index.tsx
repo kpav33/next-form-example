@@ -143,161 +143,191 @@ export default function Home() {
     }
   };
 
+  // development, production
+  const ENVIRONMENT = process.env.NODE_ENV;
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="p-4 bg-gray-100">Header</header>
 
-      <main className="flex-1 container mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-6">Contact Us</h1>
+      <>
+        {/* {ENVIRONMENT === "development" ? ( */}
+        {true ? (
+          <main className="flex-1 container mx-auto p-6">
+            <h1 className="text-2xl font-bold mb-6">Contact Us</h1>
 
-        <p>Send message over gmail</p>
-        <form
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          className="max-w-md space-y-4"
-          onSubmit={handleSubmit}
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <input type="hidden" name="bot-field" />
+            <p>Send message over gmail</p>
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              className="max-w-md space-y-4"
+              onSubmit={handleSubmit}
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="bot-field" />
 
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium mb-1">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <button
-            type="submit"
-            disabled={formStatus === "loading"}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
-          >
-            {formStatus === "loading" ? "Sending..." : "Send Message"}
-          </button>
+              <button
+                type="submit"
+                disabled={formStatus === "loading"}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              >
+                {formStatus === "loading" ? "Sending..." : "Send Message"}
+              </button>
 
-          {formStatus === "success" && (
-            <p className="text-green-600">
-              Thank you for your message! We'll get back to you soon.
-            </p>
-          )}
+              {formStatus === "success" && (
+                <p className="text-green-600">
+                  Thank you for your message! We'll get back to you soon.
+                </p>
+              )}
 
-          {formStatus === "error" && (
-            <p className="text-red-600">
-              There was an error sending your message. Please try again.{" "}
-              {errorMessage}.
-            </p>
-          )}
-        </form>
+              {formStatus === "error" && (
+                <p className="text-red-600">
+                  There was an error sending your message. Please try again.{" "}
+                  {errorMessage}.
+                </p>
+              )}
+            </form>
 
-        <br />
-        <br />
-        <hr />
-        <hr />
-        <br />
-        <br />
+            <br />
+            <br />
+            <hr />
+            <hr />
+            <br />
+            <br />
 
-        <p style={{ marginBottom: "20px" }}>Send message over Resend API</p>
-        <form
-          name="contact"
-          method="POST"
-          className="max-w-md space-y-4"
-          onSubmit={handleSubmitResend}
-        >
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            <p style={{ marginBottom: "20px" }}>Send message over Resend API</p>
+            <form
+              name="contact"
+              method="POST"
+              className="max-w-md space-y-4"
+              onSubmit={handleSubmitResend}
+            >
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium mb-1">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <button
-            type="submit"
-            disabled={formStatus === "loading"}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
-          >
-            {formStatus === "loading" ? "Sending..." : "Send Message"}
-          </button>
+              <button
+                type="submit"
+                disabled={formStatus === "loading"}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              >
+                {formStatus === "loading" ? "Sending..." : "Send Message"}
+              </button>
 
-          {formStatus === "success" && (
-            <p className="text-green-600">
-              Thank you for your message! We'll get back to you soon.
-            </p>
-          )}
+              {formStatus === "success" && (
+                <p className="text-green-600">
+                  Thank you for your message! We'll get back to you soon.
+                </p>
+              )}
 
-          {formStatus === "error" && (
-            <p className="text-red-600">
-              There was an error sending your message. Please try again.{" "}
-              {errorMessage}.
-            </p>
-          )}
-        </form>
-      </main>
+              {formStatus === "error" && (
+                <p className="text-red-600">
+                  There was an error sending your message. Please try again.{" "}
+                  {errorMessage}.
+                </p>
+              )}
+            </form>
+          </main>
+        ) : (
+          <main className="flex-1 container mx-auto p-6">
+            <p>Helo World!</p>
+          </main>
+        )}
+      </>
 
       {/* <button
         onClick={handleSubmitResend}
