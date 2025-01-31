@@ -37,10 +37,12 @@ export async function POST(request: Request) {
     console.log("SMTP Host:", process.env.SMTP_HOST);
     console.log("SMTP Port:", process.env.SMTP_PORT);
     console.log("SMTP User:", process.env.SMTP_USER);
+    console.log("SMTP Password:", process.env.SMTP_PASSWORD);
+    console.log("transporter ", transporter);
 
     const body = await request.json();
     const { name, email, message, recaptchaToken } = body;
-    // console.log("Body content", body);
+    console.log("Body content:", body);
 
     // Verify reCAPTCHA
     const isHuman = await verifyRecaptcha(recaptchaToken);
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    // console.log("isHuman check ", isHuman);
+    console.log("isHuman check ", isHuman);
 
     // const transporterCheck = await new Promise((resolve, reject) => {
     //   // verify connection configuration
@@ -83,11 +85,11 @@ export async function POST(request: Request) {
         <p><strong>Message:</strong> ${message}</p>
       `,
     };
-    // console.log("mailOptions ", mailOptions);
+    console.log("mailOptions ", mailOptions);
 
     // Send email
     await transporter.sendMail(mailOptions);
-    // console.log("Message sent!");
+    console.log("Message sent!");
 
     return NextResponse.json(
       { message: "Email sent successfully" },

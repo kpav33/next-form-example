@@ -70,8 +70,9 @@ export default function Home() {
     try {
       // Get reCAPTCHA token
       const recaptchaToken = await executeRecaptcha();
-      //   console.log("Clietn side token ", recaptchaToken);
+      console.log("Client side token ", recaptchaToken);
 
+      console.log("Begin FETCH post call...");
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -89,6 +90,7 @@ export default function Home() {
 
       setFormStatus("success");
       event.target.reset();
+      console.log("Message sent gmail success!");
     } catch (error) {
       console.error("Error:", error);
       setFormStatus("error");
