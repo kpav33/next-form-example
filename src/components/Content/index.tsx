@@ -70,9 +70,9 @@ export default function Home() {
     try {
       // Get reCAPTCHA token
       const recaptchaToken = await executeRecaptcha();
-      console.log("Client side token ", recaptchaToken);
+      // console.log("Client side token ", recaptchaToken);
 
-      console.log("Begin FETCH post call...");
+      // console.log("Begin FETCH post call...");
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -90,7 +90,7 @@ export default function Home() {
 
       setFormStatus("success");
       event.target.reset();
-      console.log("Message sent gmail success!");
+      // console.log("Message sent gmail success!");
     } catch (error) {
       console.error("Error:", error);
       setFormStatus("error");
@@ -153,8 +153,8 @@ export default function Home() {
       <header className="p-4 bg-gray-100">Header</header>
 
       <>
-        {/* {ENVIRONMENT === "development" ? ( */}
-        {true ? (
+        {/* {true ? ( */}
+        {ENVIRONMENT === "development" ? (
           <main className="flex-1 container mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6">Contact Us</h1>
 

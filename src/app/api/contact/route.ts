@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+// Still doesn't work on Coolify deployed instance, maybe some sort of network wide blocking by the cloud provider?
 // Create reusable transporter object using SMTP transport
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  // port: Number(process.env.SMTP_PORT) || 587,
-  port: 465,
+  port: Number(process.env.SMTP_PORT) || 587,
+  // port: 465,
   // true for 465, false for other ports
-  // secure: false,
-  secure: true,
+  secure: false,
+  // secure: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
@@ -36,15 +37,15 @@ import { verifyRecaptcha } from "@/lib/verifyRecaptcha";
 
 export async function POST(request: Request) {
   try {
-    console.log("SMTP Host:", process.env.SMTP_HOST);
-    console.log("SMTP Port:", process.env.SMTP_PORT);
-    console.log("SMTP User:", process.env.SMTP_USER);
-    console.log("SMTP Password:", process.env.SMTP_PASSWORD);
-    console.log("transporter ", transporter);
+    // console.log("SMTP Host:", process.env.SMTP_HOST);
+    // console.log("SMTP Port:", process.env.SMTP_PORT);
+    // console.log("SMTP User:", process.env.SMTP_USER);
+    // console.log("SMTP Password:", process.env.SMTP_PASSWORD);
+    // console.log("transporter ", transporter);
 
     const body = await request.json();
     const { name, email, message, recaptchaToken } = body;
-    console.log("Body content:", body);
+    // console.log("Body content:", body);
 
     // Verify reCAPTCHA
     const isHuman = await verifyRecaptcha(recaptchaToken);
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    console.log("isHuman check ", isHuman);
+    // console.log("isHuman check ", isHuman);
 
     // const transporterCheck = await new Promise((resolve, reject) => {
     //   // verify connection configuration
@@ -87,11 +88,11 @@ export async function POST(request: Request) {
         <p><strong>Message:</strong> ${message}</p>
       `,
     };
-    console.log("mailOptions ", mailOptions);
+    // console.log("mailOptions ", mailOptions);
 
     // Send email
     await transporter.sendMail(mailOptions);
-    console.log("Message sent!");
+    // console.log("Message sent!");
 
     return NextResponse.json(
       { message: "Email sent successfully" },
